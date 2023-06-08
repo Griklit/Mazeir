@@ -11,7 +11,7 @@ impl DepthFirstBuild for Maze {
         if start_point.0.is_none() || start_point.1.is_none() { return; }
         let start_point = (start_point.0.unwrap(), start_point.1.unwrap());
         self.map[start_point.1][start_point.0] = true;
-        let mut route = vec![start_point];
+        let mut route = vec![start_point, start_point];
         while let Some((x, y)) = route.pop() {
             let (mut x, mut y) = (x as i64, y as i64);
             loop {

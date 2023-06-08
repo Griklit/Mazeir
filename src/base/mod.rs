@@ -4,6 +4,6 @@ pub mod direction;
 pub mod around;
 
 pub use maze::Maze;
-pub use errors::MazeError;
+pub use errors::{MazeError, CommandLineInterfaceError};
 pub use direction::Direction;
 pub use around::Around;
