@@ -1,4 +1,4 @@
-use super::base::{Maze, Around};
+use super::super::{Maze, Around};
 
 
 pub trait DepthFirstBuild {

@@ -1,5 +1,7 @@
-pub mod maze;
+pub mod base;
+pub mod generator;
+pub mod output;
 
-pub use maze::{Maze, MazeError, DepthFirstBuild};
-
-
+pub use base::*;
+pub use generator::*;
+pub use output::*;

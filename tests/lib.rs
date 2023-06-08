@@ -1,12 +1,18 @@
-extern crate maze_rs;
+extern crate mazeir;
 
 use std::path::Path;
-use maze_rs::{Maze, MazeError, DepthFirstBuild};
+use mazeir::{Maze, MazeError, DepthFirstBuild, Draw};
 
+#[test]
+fn depth_first_default() {
+    let mut maze = Maze::default().seed(0);
+    maze.depth_first();
+    maze.draw(Path::new("tests/output/DepthFirst_default.png")).unwrap();
+}
 
 #[test]
 fn depth_first_0x1() {
-    let  maze = Maze::new(0, 1);
+    let maze = Maze::new(0, 1);
     match maze {
         Ok(_) => panic!("Maze should not be created"),
         Err(MazeError::WidthIsZero) => (),
@@ -46,8 +52,8 @@ fn depth_first_4x7() {
 }
 
 #[test]
-fn depth_first_default() {
-    let mut maze = Maze::default().seed(0);
+fn depth_first_2047x1023() {
+    let mut maze = Maze::new(2047, 1023).unwrap().seed(0);
     maze.depth_first();
-    maze.draw(Path::new("tests/output/DepthFirst_default.png")).unwrap();
+    maze.draw(Path::new("tests/output/DepthFirst_2047x1023.png")).unwrap();
 }

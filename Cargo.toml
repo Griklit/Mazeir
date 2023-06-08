@@ -1,10 +1,15 @@
 [package]
 name = "Mazeir"
-authors = ["Griklit"]
+authors = ["Scalt"]
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+license-file = "./LICENSE"
+keywords = ['maze', 'depth-first']
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "mazeir"
+path = "src/lib.rs"
 
 [[bin]]
 name = "mazeir"
