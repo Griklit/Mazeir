@@ -45,10 +45,10 @@ fn depth_first_1x3() {
 }
 
 #[test]
-fn depth_first_4x7() {
-    let mut maze = Maze::new(4, 7).unwrap().seed(0);
+fn depth_first_4x21() {
+    let mut maze = Maze::new(4, 21).unwrap().seed(0);
     maze.depth_first();
-    maze.draw(Path::new("tests/output/DepthFirst_4x7.png")).unwrap();
+    maze.draw(Path::new("tests/output/DepthFirst_4x21.png")).unwrap();
 }
 
 #[test]
