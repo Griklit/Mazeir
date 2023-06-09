@@ -5,8 +5,8 @@ pub enum MazeError {
     Unsupported(String),
 }
 
-impl Into<String> for MazeError {
-    fn into(self) -> String {
+impl ToString for MazeError {
+    fn to_string(&self) -> String {
         match self {
             MazeError::WidthIsZero => "width cannot be zero".to_string(),
             MazeError::HeightIsZero => "height cannot be zero".to_string(),
@@ -24,8 +24,9 @@ pub enum CommandLineInterfaceError {
     Unsupported(String),
 }
 
-impl Into<String> for CommandLineInterfaceError {
-    fn into(self) -> String {
+
+impl ToString for CommandLineInterfaceError {
+    fn to_string(&self) -> String {
         match self {
             CommandLineInterfaceError::SizeError(s) => format!("SizeError: {s}"),
             CommandLineInterfaceError::OutputTypeError(s) => format!("OutputTypeError: {s}"),

@@ -1,7 +1,7 @@
 use std::env;
-use std::fmt::Debug;
-use std::path::Path;
 use std::str::FromStr;
+use Into;
+use std::path::Path;
 
 use mazeir::*;
 use mazeir::CommandLineInterfaceError as CLIErr;
@@ -29,6 +29,7 @@ fn cli() -> Result<(), CLIErr> {
     let mut width = 511;
     let mut height = 511;
     let mut output: Option<OutPut> = None;
+    let mut output_path: Option<&Path> = None;
     let mut args = env::args().skip(1);
     while let arg = args.next() {
         if arg.is_none() { continue; }
@@ -48,10 +49,15 @@ fn cli() -> Result<(), CLIErr> {
                     output = Some(OutPut::from_str(o.as_str())?)
                 }
             }
+            "--output_path" | "--output_path=" => {
+                if let Some(p) = args.next() {
+                    output_path = Some(Path::new(p.as_str()))
+                }
+            }
             _ => ()
         }
     }
-    let maze = Maze::new(width, height).map_err(|e| CLIErr::CreateMazeError(e.into()))?;
+    let maze = Maze::new(width, height).map_err(|e| CLIErr::CreateMazeError(e.to_string()))?;
 
     Ok(())
 }
@@ -59,6 +65,6 @@ fn cli() -> Result<(), CLIErr> {
 fn main() {
     match cli() {
         Ok(_) => eprintln!("Maze build success!"),
-        Err(err) => eprintln!(err.into())
+        Err(err) => eprintln!("{}", err.to_string())
     }
 }
