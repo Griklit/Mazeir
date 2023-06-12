@@ -8,6 +8,9 @@ use rand::prelude::{random, SliceRandom};
 use image::{GrayImage, ImageBuffer, Luma, ImageError};
 
 use super::errors::MazeError;
+use super::enumerates::{GeneratorType, OutputType};
+use super::super::generator::*;
+use super::super::output::*;
 
 
 pub struct Maze {
@@ -16,17 +19,12 @@ pub struct Maze {
     pub width: usize,
     pub height: usize,
     pub map: Vec<Vec<bool>>,
-    pub rng: StdRng,
+    pub(crate) rng: StdRng,
 }
 
 impl Maze {
     pub fn new(width: usize, height: usize) -> Result<Self, MazeError> {
-        if width == 0 {
-            return Err(MazeError::WidthIsZero);
-        }
-        if height == 0 {
-            return Err(MazeError::HeightIsZero);
-        }
+        if width == 0 || height == 0 { return Err(MazeError::SizeIsZero); }
         let fix_width = if width % 2 == 0 { width - 1 } else { width };
         let fix_height = if height % 2 == 0 { height - 1 } else { height };
         let maze = Maze {
@@ -40,7 +38,7 @@ impl Maze {
         Ok(maze)
     }
 
-    pub fn seed(mut self, seed: u64) -> Self {
+    pub fn seed(&mut self, seed: u64) -> &mut Self {
         self.rng = SeedableRng::seed_from_u64(seed);
         self
     }
@@ -54,6 +52,22 @@ impl Maze {
         } else { None };
         (x, y)
     }
+
+    pub fn build(&mut self, generator_type: GeneratorType) -> &mut Self {
+        match generator_type {
+            GeneratorType::DepthFirst => self.depth_first()
+        }
+        self
+    }
+
+    pub fn output(&self, output_type: OutputType, path: &Path) -> Result<&Self, MazeError> {
+        match output_type {
+            OutputType::Image => self.draw(path)?,
+            OutputType::Text => self.write(path)?,
+            OutputType::Stdout => self.print()?,
+        };
+        Ok(self)
+    }
 }
 
 impl Default for Maze {
@@ -64,7 +78,8 @@ impl Default for Maze {
 
 impl Debug for Maze {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Maze {{{}x{}}}", self.raw_width, self.raw_height)
+        write!(f, "Maze {{raw_width: {}, raw_height: {}, width: {}, height: {}}}",
+               self.raw_width, self.raw_height, self.width, self.height)
     }
 }
 

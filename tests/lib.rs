@@ -1,7 +1,11 @@
 extern crate mazeir;
 
 use std::path::Path;
-use mazeir::{Maze, MazeError, DepthFirstBuild, Draw};
+use mazeir::*;
+use base::*;
+use generator::*;
+use output::*;
+
 
 #[test]
 fn depth_first_default() {
