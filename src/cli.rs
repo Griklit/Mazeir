@@ -1,70 +1,91 @@
 use std::env;
 use std::str::FromStr;
-use Into;
 use std::path::Path;
 
-use mazeir::*;
-use mazeir::CommandLineInterfaceError as CLIErr;
+use rand::random;
 
-
-enum OutPut {
-    Image,
-    StdOut,
-}
-
-impl FromStr for OutPut {
-    type Err = CLIErr;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "image" | "png" | "jpg" => Ok(Self::Image),
-            "stdout" | "print" => Ok(Self::StdOut),
-            _ => Err(CLIErr::OutputTypeError(format!("{s} is not a legal value. The output argument must be ont of image,png or 000").to_string())),
-        }
-    }
-}
+use mazeir::{base::*, generator::*, output::*};
+use CommandLineInterfaceError as CLIErr;
 
 
 fn cli() -> Result<(), CLIErr> {
-    let mut width = 511;
-    let mut height = 511;
-    let mut output: Option<OutPut> = None;
-    let mut output_path: Option<&Path> = None;
+    let mut pos_args = Vec::new();
+    let mut width: Option<String> = None;
+    let mut height: Option<String> = None;
+    let mut generator: Option<String> = None;
+    let mut output: Option<String> = None;
+    let mut output_path: Option<String> = None;
+    let mut seed: Option<String> = None;
     let mut args = env::args().skip(1);
     while let arg = args.next() {
-        if arg.is_none() { continue; }
-        match arg.unwrap().as_str() {
-            "-w" | "--width" | "--width=" => {
-                if let Some(w) = args.next() {
-                    width = w.parse().map_err(|e| CLIErr::SizeError(format!("Width parsing failed. {e:?}")))?;
-                }
+        if arg.is_none() { break; }
+        let arg = arg.unwrap();
+        if arg.starts_with("-") {
+            match arg.as_str() {
+                "-w" | "--width" => { width = args.next(); }
+                "-h" | "--height" => { height = args.next(); }
+                "-g" | "--generator" => { generator = args.next(); }
+                "-o" | "--output" => { output = args.next(); }
+                "-p" | "--path" | "--output_path" => { output_path = args.next(); }
+                "-s" | "--seed" => { seed = args.next(); }
+                _ => ()
             }
-            "-h" | "--height" | "--height=" => {
-                if let Some(h) = args.next() {
-                    height = h.parse().map_err(|e| CLIErr::SizeError(format!("Height parsing failed. {e:?}")))?;
-                }
-            }
-            "-o" | "--output" | "--output=" => {
-                if let Some(o) = args.next() {
-                    output = Some(OutPut::from_str(o.as_str())?)
-                }
-            }
-            "--output_path" | "--output_path=" => {
-                if let Some(p) = args.next() {
-                    output_path = Some(Path::new(p.as_str()))
-                }
-            }
-            _ => ()
+        } else {
+            pos_args.push(arg);
         }
     }
-    let maze = Maze::new(width, height).map_err(|e| CLIErr::CreateMazeError(e.to_string()))?;
-
+    pos_args.reverse();
+    if width.is_none() { width = pos_args.pop(); }
+    if height.is_none() { height = pos_args.pop(); }
+    let mut p_width = 127usize;
+    if let Some(w) = width {
+        p_width = w.parse().map_err(|e| CLIErr::ArgumentParseError(format!("Width parsing failed. {e:?}")))?;
+    }
+    let mut p_height = 127usize;
+    if let Some(h) = height {
+        p_height = h.parse().map_err(|e| CLIErr::ArgumentParseError(format!("Height parsing failed. {e:?}")))?;
+    }
+    let mut p_generator = GeneratorType::DepthFirst;
+    if let Some(g) = generator {
+        p_generator = GeneratorType::from_str(g.as_str())
+            .map_err(|e| CLIErr::ArgumentParseError(format!("Generator parsing failed. {e:?}")))?;
+    }
+    let mut p_output = OutputType::Stdout;
+    if let Some(o) = output {
+        p_output = OutputType::from_str(o.as_str())
+            .map_err(|e| CLIErr::ArgumentParseError(format!("Output parsing failed. {e:?}")))?;
+    }
+    let mut p_output_path = Path::new("");
+    if let Some(p) = output_path {
+        p_output_path = Path::new(p.as_str());
+    } else {
+        p_output_path = Path::new(match p_output {
+            OutputType::Image => "maze.png",
+            OutputType::Stdout => "",
+            OutputType::Text => "maze.txt",
+        });
+    }
+    // let seed = seed.map(|s| s.parse::<u64>()
+    //     .map_err(|e| CLIErr::ArgumentParseError(format!("Seed parsing failed. {e:?}"))))?
+    //     .unwrap_or(random());
+    let mut maze = Maze::new(p_width, p_height).map_err(|e| CLIErr::CreateMazeError(e))?;
+    // maze.seed(seed);
+    maze.build(p_generator)
+        .output(p_output, p_output_path)
+        .map_err(|e| CLIErr::CreateMazeError(e))?;
     Ok(())
 }
 
+fn test() {
+    let mut maze = Maze::new(32, 10).unwrap();
+    maze.depth_first();
+    maze.print();
+}
+
 fn main() {
+    // test();
     match cli() {
-        Ok(_) => eprintln!("Maze build success!"),
+        Ok(_) => (),
         Err(err) => eprintln!("{}", err.to_string())
     }
 }

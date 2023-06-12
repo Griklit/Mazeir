@@ -1,16 +1,20 @@
 #[derive(Debug)]
 pub enum MazeError {
-    WidthIsZero,
-    HeightIsZero,
+    SizeIsZero,
+    GeneratorTypeError,
+    OutputTypeError,
+    OutputError(String),
     Unsupported(String),
 }
 
 impl ToString for MazeError {
     fn to_string(&self) -> String {
         match self {
-            MazeError::WidthIsZero => "width cannot be zero".to_string(),
-            MazeError::HeightIsZero => "height cannot be zero".to_string(),
-            MazeError::Unsupported(s) => s
+            MazeError::SizeIsZero => "Width or height cannot be zero".to_string(),
+            MazeError::GeneratorTypeError => "Invalid generator type".to_string(),
+            MazeError::OutputTypeError => "Invalid output type".to_string(),
+            MazeError::OutputError(s) => format!("Failed to output maze, {}", s),
+            MazeError::Unsupported(s) => s.clone(),
         }
     }
 }
@@ -18,9 +22,8 @@ impl ToString for MazeError {
 
 #[derive(Debug)]
 pub enum CommandLineInterfaceError {
-    SizeError(String),
-    OutputTypeError(String),
-    CreateMazeError(String),
+    ArgumentParseError(String),
+    CreateMazeError(MazeError),
     Unsupported(String),
 }
 
@@ -28,9 +31,8 @@ pub enum CommandLineInterfaceError {
 impl ToString for CommandLineInterfaceError {
     fn to_string(&self) -> String {
         match self {
-            CommandLineInterfaceError::SizeError(s) => format!("SizeError: {s}"),
-            CommandLineInterfaceError::OutputTypeError(s) => format!("OutputTypeError: {s}"),
-            CommandLineInterfaceError::CreateMazeError(s) => format!("CreateMazeError: {s}"),
+            CommandLineInterfaceError::ArgumentParseError(s) => format!("ArgumentParseError: {s}"),
+            CommandLineInterfaceError::CreateMazeError(m) => format!("CreateMazeError: {}", m.to_string()),
             CommandLineInterfaceError::Unsupported(s) => format!("UnsupportedError: {s}"),
         }
     }

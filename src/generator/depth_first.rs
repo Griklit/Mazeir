@@ -1,11 +1,11 @@
-use super::super::{Maze, Around};
+use super::super::base::{Maze, Around};
 
 
-pub trait DepthFirstBuild {
+pub trait DepthFirst {
     fn depth_first(&mut self);
 }
 
-impl DepthFirstBuild for Maze {
+impl DepthFirst for Maze {
     fn depth_first(&mut self) {
         let start_point = self.center_point();
         if start_point.0.is_none() || start_point.1.is_none() { return; }
