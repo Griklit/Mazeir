@@ -12,15 +12,15 @@ impl FromStr for GeneratorType {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_ascii_lowercase().as_str() {
             "depth_first" | "depth" => Ok(Self::DepthFirst),
-            _ => Err(MazeError::GeneratorTypeError),
+            _ => Err(MazeError::InvalidGeneratorType),
         }
     }
 }
 
 pub enum OutputType {
-    Image,
+    Image(Path),
     Stdout,
-    Text,
+    Text(Path),
 }
 
 impl FromStr for OutputType {
@@ -28,10 +28,10 @@ impl FromStr for OutputType {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_ascii_lowercase().as_str() {
-            "image" | "pic" | "picture" => Ok(Self::Image),
+            "image" | "pic" | "picture" => Ok(Self::Image()),
             "stdout" | "print" => Ok(Self::Stdout),
             "text" | "txt" => Ok(Self::Text),
-            _ => Err(MazeError::OutputTypeError),
+            _ => Err(MazeError::InvalidOutputType),
         }
     }
 }

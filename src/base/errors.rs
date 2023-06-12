@@ -1,8 +1,8 @@
 #[derive(Debug)]
 pub enum MazeError {
     SizeIsZero,
-    GeneratorTypeError,
-    OutputTypeError,
+    InvalidGeneratorType,
+    InvalidOutputType,
     OutputError(String),
     Unsupported(String),
 }
@@ -11,8 +11,8 @@ impl ToString for MazeError {
     fn to_string(&self) -> String {
         match self {
             MazeError::SizeIsZero => "Width or height cannot be zero".to_string(),
-            MazeError::GeneratorTypeError => "Invalid generator type".to_string(),
-            MazeError::OutputTypeError => "Invalid output type".to_string(),
+            MazeError::InvalidGeneratorType => "Invalid generator type".to_string(),
+            MazeError::InvalidOutputType => "Invalid output type".to_string(),
             MazeError::OutputError(s) => format!("Failed to output maze, {}", s),
             MazeError::Unsupported(s) => s.clone(),
         }
