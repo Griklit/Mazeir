@@ -8,6 +8,8 @@ use mazeir::{base::*, generator::*, output::*};
 use CommandLineInterfaceError as CLIErr;
 
 
+fn
+
 fn cli() -> Result<(), CLIErr> {
     let mut pos_args = Vec::new();
     let mut width: Option<String> = None;
@@ -65,9 +67,10 @@ fn cli() -> Result<(), CLIErr> {
             OutputType::Text => "maze.txt",
         });
     }
-    // let seed = seed.map(|s| s.parse::<u64>()
-    //     .map_err(|e| CLIErr::ArgumentParseError(format!("Seed parsing failed. {e:?}"))))?
-    //     .unwrap_or(random());
+    let mut p_seed = u64::default();
+    if let Some(s) = seed {
+        p_seed = s.parse().map_err(|e| CLIErr::ArgumentParseError(format!("Seed parsing failed. {e:?}")))?
+    }
     let mut maze = Maze::new(p_width, p_height).map_err(|e| CLIErr::CreateMazeError(e))?;
     // maze.seed(seed);
     maze.build(p_generator)
