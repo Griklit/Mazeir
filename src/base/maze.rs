@@ -2,7 +2,7 @@ use std::fmt::{Debug, Display, Formatter};
 use std::default::Default;
 use std::path::Path;
 
-use rand::{SeedableRng, Rng};
+use rand::SeedableRng;
 use rand::rngs::StdRng;
 use rand::prelude::{random, SliceRandom};
 use image::{GrayImage, ImageBuffer, Luma, ImageError};
@@ -60,10 +60,10 @@ impl Maze {
         self
     }
 
-    pub fn output(&self, output_type: OutputType, path: &Path) -> Result<&Self, MazeError> {
+    pub fn output(&self, output_type: OutputType) -> Result<&Self, MazeError> {
         match output_type {
-            OutputType::Image => self.draw(path)?,
-            OutputType::Text => self.write(path)?,
+            OutputType::Image(path) => self.draw(&path)?,
+            OutputType::Text(path) => self.write(&path)?,
             OutputType::Stdout => self.print()?,
         };
         Ok(self)

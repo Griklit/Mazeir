@@ -1,7 +1,9 @@
+use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
 use super::errors::MazeError;
 
+#[derive(Debug)]
 pub enum GeneratorType {
     DepthFirst,
 }
@@ -18,20 +20,26 @@ impl FromStr for GeneratorType {
 }
 
 pub enum OutputType {
-    Image(Path),
+    Image(PathBuf),
     Stdout,
-    Text(Path),
+    Text(PathBuf),
 }
 
-impl FromStr for OutputType {
-    type Err = MazeError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s.to_ascii_lowercase().as_str() {
-            "image" | "pic" | "picture" => Ok(Self::Image()),
-            "stdout" | "print" => Ok(Self::Stdout),
-            "text" | "txt" => Ok(Self::Text),
-            _ => Err(MazeError::InvalidOutputType),
-        }
-    }
-}
+// impl From<> for OutputType{
+//     fn from(path: Path) -> Self {
+//         Self::Image(path)
+//     }
+// }
+//
+// impl FromStr for OutputType {
+//     type Err = MazeError;
+//
+//     fn from_str(s: &str) -> Result<Self, Self::Err> {
+//         match s.to_ascii_lowercase().as_str() {
+//             "image" | "pic" | "picture" => Ok(Self::Image()),
+//             "stdout" | "print" => Ok(Self::Stdout),
+//             "text" | "txt" => Ok(Self::Text),
+//             _ => Err(MazeError::InvalidOutputType),
+//         }
+//     }
+// }
