@@ -17,3 +17,4 @@ path = "src/cli.rs"
 [dependencies]
 rand = "0.8.5"
 image = "0.24.0"
+argh = "0.1.10"
