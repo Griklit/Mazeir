@@ -13,8 +13,8 @@ impl FromStr for GeneratorType {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_ascii_lowercase().as_str() {
-            "depth_first" | "depth" => Ok(Self::DepthFirst),
-            _ => Err(MazeError::InvalidGeneratorType),
+            "depth_first" | "depth" | "depthfirst" | "depth-first" => Ok(Self::DepthFirst),
+            _ => Err(MazeError::InvalidGeneratorType(s.to_string())),
         }
     }
 }
