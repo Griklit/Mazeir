@@ -3,8 +3,8 @@ use std::fmt::{Display, Formatter};
 #[derive(Debug)]
 pub enum MazeError {
     SizeIsZero,
-    InvalidGeneratorType,
-    InvalidOutputType,
+    InvalidGeneratorType(String),
+    InvalidOutputType(String),
     OutputError(String),
     Unsupported(String),
 }
@@ -13,8 +13,8 @@ impl Display for MazeError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             MazeError::SizeIsZero => write!(f, "width or height cannot be zero"),
-            MazeError::InvalidGeneratorType => write!(f, "invalid generator type"),
-            MazeError::InvalidOutputType => write!(f, "invalid output type"),
+            MazeError::InvalidGeneratorType(s) => write!(f, "invalid generator type: {s}"),
+            MazeError::InvalidOutputType(s) => write!(f, "invalid output type: {s}"),
             MazeError::OutputError(s) => write!(f, "failed to output maze, {s}"),
             MazeError::Unsupported(s) => write!(f, "{s}"),
         }
