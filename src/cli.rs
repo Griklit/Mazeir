@@ -23,8 +23,8 @@ struct CliArguments {
     seed: u64,
 
     /// generator(algorithm) type, options: depth-first
-    #[argh(option, short = 'g', default = "GeneratorType::DepthFirst", from_str_fn(GeneratorType::from_str))]
-    generator: GeneratorType,
+    #[argh(option, short = 'g', default = "\"depth-first\".to_string()")]
+    generator: String,
 
     /// output type, options: image, text, stdout
     #[argh(option, short = 'o', default = "\"stdout\".to_string()")]
@@ -37,16 +37,18 @@ struct CliArguments {
 
 fn cli() -> Result<(), CLIErr> {
     let args: CliArguments = argh::from_env();
+    let generator = GeneratorType::from_str(args.generator.as_str())
+        .map_err(|e| CLIErr::BuildMazeError(e))?;
     let output_str = args.output.to_ascii_lowercase();
     let output = match output_str.as_str() {
-        "image" | "pic" | "png" => OutputType::Image(args.output_path.unwrap_or(PathBuf::from_str("maze.png").unwrap())),
+        "image" | "pic" | "png" | "jpg" => OutputType::Image(args.output_path.unwrap_or(PathBuf::from_str("maze.png").unwrap())),
         "stdout" | "print" => OutputType::Stdout,
         "text" | "txt" => OutputType::Text(args.output_path.unwrap_or(PathBuf::from_str("maze.txt").unwrap())),
         _ => { return Err(CLIErr::BuildMazeError(MazeError::InvalidOutputType(output_str))); }
     };
     let mut maze = Maze::new(args.width, args.height).map_err(|e| CLIErr::BuildMazeError(e))?;
     maze.seed(args.seed)
-        .build(args.generator)
+        .build(generator)
         .output(output).map_err(|e| CLIErr::BuildMazeError(e))?;
     Ok(())
 }

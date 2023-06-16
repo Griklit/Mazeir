@@ -1,15 +1,15 @@
 use std::path::Path;
 
-use image::{GrayImage, ImageBuffer, Luma, ImageError};
+use image::{GrayImage, ImageBuffer, Luma};
 
 use super::super::base::{Maze, MazeError};
 
 pub trait Image {
-    fn draw(&self, path: &Path) -> Result<(), MazeError>;
+    fn draw<P: AsRef<Path>>(&self, path: P) -> Result<(), MazeError>;
 }
 
 impl Image for Maze {
-    fn draw(&self, path: &Path) -> Result<(), MazeError> {
+    fn draw<P: AsRef<Path>>(&self, path: P) -> Result<(), MazeError> {
         let mut img: GrayImage = ImageBuffer::new(self.raw_width as u32, self.raw_height as u32);
         let pixel_white = Luma([255]);
         let pixel_black = Luma([0]);
