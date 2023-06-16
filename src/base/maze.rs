@@ -1,11 +1,9 @@
 use std::fmt::{Debug, Display, Formatter};
 use std::default::Default;
-use std::path::Path;
 
 use rand::SeedableRng;
 use rand::rngs::StdRng;
-use rand::prelude::{random, SliceRandom};
-use image::{GrayImage, ImageBuffer, Luma, ImageError};
+use rand::prelude::random;
 
 use super::errors::MazeError;
 use super::enumerates::{GeneratorType, OutputType};
@@ -72,7 +70,7 @@ impl Maze {
 
 impl Default for Maze {
     fn default() -> Self {
-        Maze::new(511, 511).unwrap()
+        Maze::new(127, 127).unwrap()
     }
 }
 
