@@ -7,7 +7,7 @@ use rand::prelude::random;
 
 use super::errors::MazeError;
 use super::enumerates::{GeneratorType, OutputType};
-use super::super::generator::*;
+use super::super::arithmetic::*;
 use super::super::output::*;
 
 

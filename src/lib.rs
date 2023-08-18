@@ -1,5 +1,5 @@
 pub mod base;
-pub mod generator;
+pub mod arithmetic;
 pub mod output;
 mod map;
 
