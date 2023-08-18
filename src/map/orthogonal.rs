@@ -75,16 +75,14 @@ impl Default for Orthogonal {
     }
 }
 
-mod last_direction {
-    pub const UP: u8 = 0b0000_0000;
-    pub const DOWN: u8 = 0b0000_0100;
-    pub const LEFT: u8 = 0b0000_1000;
-    pub const RIGHT: u8 = 0b0000_1100;
-}
 
 impl DepthFirst for Orthogonal {
     fn depth_first(&mut self, seed: Option<[u8; 16]>) {
-        const LAST_DIRECTION_MASK: u8 = !0b0000_1100;
+        const LAST_DIRECTION_MASK: u8 = 0b1111_0011;
+        const LAST_DIRECTION_UP: u8 = 0b0000_0000;
+        const LAST_DIRECTION_DOWN: u8 = 0b0000_0100;
+        const LAST_DIRECTION_LEFT: u8 = 0b0000_1000;
+        const LAST_DIRECTION_RIGHT: u8 = 0b0000_1100;
         let mut rng = if let Some(seed) = seed { XorShiftRng::from_seed(seed) } else { XorShiftRng::from_entropy() };
         let start_point = self.center_point();
         self.set(start_point.0, start_point.1, 0b0000_0001);
@@ -101,32 +99,32 @@ impl DepthFirst for Orthogonal {
                         Direction::Up => {
                             y -= 1;
                             self.map[y * self.width + x] &= LAST_DIRECTION_MASK;
-                            self.map[y * self.width + x] |= last_direction::DOWN;
+                            self.map[y * self.width + x] |= LAST_DIRECTION_DOWN;
                         }
                         Direction::Down => {
                             y += 1;
                             self.map[y * self.width + x] &= LAST_DIRECTION_MASK;
-                            self.map[y * self.width + x] |= last_direction::UP;
+                            self.map[y * self.width + x] |= LAST_DIRECTION_UP;
                         }
                         Direction::Left => {
                             x -= 1;
                             self.map[y * self.width + x] &= LAST_DIRECTION_MASK;
-                            self.map[y * self.width + x] |= last_direction::RIGHT;
+                            self.map[y * self.width + x] |= LAST_DIRECTION_RIGHT;
                         }
                         Direction::Right => {
                             x += 1;
                             self.map[y * self.width + x] &= LAST_DIRECTION_MASK;
-                            self.map[y * self.width + x] |= last_direction::LEFT;
+                            self.map[y * self.width + x] |= LAST_DIRECTION_LEFT;
                         }
                     }
                 }
                 None => {
                     let point_value = self.get(x, y);
                     match point_value & 0b00001100 {
-                        last_direction::UP => { y -= 1; }
-                        last_direction::DOWN => { y += 1; }
-                        last_direction::LEFT => { x -= 1; }
-                        last_direction::RIGHT => { y += 1; }
+                        LAST_DIRECTION_UP => { y -= 1; }
+                        LAST_DIRECTION_DOWN => { y += 1; }
+                        LAST_DIRECTION_LEFT => { x -= 1; }
+                        LAST_DIRECTION_RIGHT => { y += 1; }
                         _ => {}//不会发生
                     }
                 }
