@@ -3,7 +3,7 @@ extern crate mazeir;
 use std::fs;
 use std::io::Read;
 use std::path::{Path, PathBuf};
-use mazeir::{base::*, generator::*, output::*};
+use mazeir::{base::*, arithmetic::*, output::*};
 
 
 fn compare_snapshot<P: AsRef<Path>>(file_name: P) {
