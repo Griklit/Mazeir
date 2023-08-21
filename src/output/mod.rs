@@ -1,7 +1,7 @@
-mod image;
+// mod image;
 mod stdout;
-mod text;
+// mod text;
 
-pub use self::image::Image;
+// pub use self::image::Image;
 pub use self::stdout::Stdout;
-pub use self::text::Text;
+// pub use self::text::Text;

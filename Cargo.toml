@@ -18,6 +18,10 @@ path = "src/cli.rs"
 test = false
 doctest = false
 
+[[bin]]
+name = "mazeir-test"
+path = "src/main.rs"
+
 [[test]]
 name = "mazeir"
 path = "tests/lib.rs"
