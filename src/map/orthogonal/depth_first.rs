@@ -1,3 +1,9 @@
+//! Cell bit flags:
+//!
+//! | flag | description |
+//! |:----:|:------------|
+//! | 0 | visited |
+//! | 1-3 | last direction |
 use super::{Orthogonal, Direction};
 
 use rand::SeedableRng;
@@ -15,6 +21,7 @@ const LAST_DIRECTION_RIGHT: u8 = 0b0010_0000;
 const LAST_DIRECTION_UP: u8 = 0b0011_0000;
 const LAST_DIRECTION_DOWN: u8 = 0b00100_0000;
 
+
 impl Orthogonal {
     fn add_walls_to_vec_with_flag(&mut self, x: usize, y: usize, vec: &mut Vec<Direction>) {
         if x != 0 && *self.get(x - 1, y) & FLAG == 0 { vec.push(Direction::Left); }
@@ -24,11 +31,7 @@ impl Orthogonal {
     }
 }
 
-/// Cell:
-///
-/// | 0 | 1-3 |
-/// |:-:|:---:|
-/// | flag | LastDirection |
+
 impl DepthFirst for Orthogonal {
     fn depth_first(&mut self, seed: Option<[u8; 16]>) {
         let mut rng = if let Some(seed) = seed { XorShiftRng::from_seed(seed) } else { XorShiftRng::from_entropy() };
