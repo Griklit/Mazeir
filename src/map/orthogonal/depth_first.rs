@@ -38,11 +38,10 @@ impl DepthFirst for Orthogonal {
         let mut walls = Vec::with_capacity(4);
         loop {
             walls.clear();
-            println!("{} {} {} {}", x, y, self.width, self.height);
+            // println!("{} {} {} {}", x, y, self.width, self.height);
             self.add_walls_to_vec_with_flag(x, y, &mut walls);
-            println!("{:?}", walls);
             let wall = walls.choose(&mut rng);
-            println!("{:?}", wall);
+            // println!("{:?}", wall);
             match wall {
                 Some(wall) => {
                     self.break_wall(x, y, wall);
