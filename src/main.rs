@@ -3,7 +3,7 @@ use mazeir::arithmetic::DepthFirst;
 use mazeir::output::Stdout;
 
 fn main() {
-    let mut map = Orthogonal::new(32, 16);
+    let mut map = Orthogonal::new(32, 64);
     map.depth_first(None);
     map.print();
 }

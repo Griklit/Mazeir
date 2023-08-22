@@ -1,7 +1,7 @@
 //! Cell bit flags:
 //!
 //! | flag | description |
-//! |:----:|:------------|
+//! |:-----|:------------|
 //! | 0 | visited |
 //! | 1-3 | last direction |
 use super::{Orthogonal, Direction};
