@@ -9,9 +9,12 @@ pub enum Direction { Left, Right, Up, Down }
 
 /// Cell:
 ///
-/// | 0-5 | 6 | 7 |
-/// |:---:|:-:|:-:|
-/// | Algorithm customization | Right wall | Down wall |
+/// | flag | description |
+/// |:-----|:------------|
+/// | 0-5  | Algorithm customization |
+/// | 6    | Right wall |
+/// | 7    | Down wall |
+
 pub struct Orthogonal {
     width: usize,
     height: usize,
