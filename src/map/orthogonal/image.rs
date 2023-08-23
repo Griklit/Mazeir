@@ -14,13 +14,12 @@ impl Draw for Orthogonal {
         let image_width = (self.width * 2 + 1) as u32;
         let image_height = (self.height * 2 + 1) as u32;
         let image_width_byte_count = (image_width as usize / 8) + if image_width % 8 == 0 { 0 } else { 1 };
-        println!("{}x{} ", image_width, image_height);
         let mut encoder = Encoder::new(writer, image_width, image_height);
         encoder.set_depth(BitDepth::One);
         encoder.set_color(ColorType::Indexed);
         encoder.set_palette(vec![0, 0, 0, 255, 255, 255]);
         let mut writer = encoder.write_header().map_err(|_| DrawError::WriteHeaderFailed)?;
-        let mut writer = writer.stream_writer_with_size(1024).map_err(|_| DrawError::CreateStreamWriterFailed)?;
+        let mut writer = writer.stream_writer_with_size(128 * 1024).map_err(|_| DrawError::CreateStreamWriterFailed)?;
         for line in self.map.chunks(self.width) {
             for cell in line.chunks(4) {
                 let mut byte = 0b0000_0000;
