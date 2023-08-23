@@ -4,7 +4,7 @@
 //! |:-----|:------------|
 //! | 0 | visited |
 //! | 1-3 | last direction |
-use super::{Orthogonal, Direction};
+use super::{Orthogonal, Direction2D};
 
 use rand::SeedableRng;
 use rand::seq::SliceRandom;
@@ -23,11 +23,11 @@ const LAST_DIRECTION_DOWN: u8 = 0b00100_0000;
 
 
 impl Orthogonal {
-    fn add_walls_to_vec_with_flag(&mut self, x: usize, y: usize, vec: &mut Vec<Direction>) {
-        if x != 0 && *self.get(x - 1, y) & FLAG == 0 { vec.push(Direction::Left); }
-        if x != self.width - 1 && *self.get(x + 1, y) & FLAG == 0 { vec.push(Direction::Right); }
-        if y != 0 && *self.get(x, y - 1) & FLAG == 0 { vec.push(Direction::Up); }
-        if y != self.height - 1 && *self.get(x, y + 1) & FLAG == 0 { vec.push(Direction::Down); }
+    fn add_walls_to_vec_with_flag(&mut self, x: usize, y: usize, vec: &mut Vec<Direction2D>) {
+        if x != 0 && *self.get(x - 1, y) & FLAG == 0 { vec.push(Direction2D::Left); }
+        if x != self.width - 1 && *self.get(x + 1, y) & FLAG == 0 { vec.push(Direction2D::Right); }
+        if y != 0 && *self.get(x, y - 1) & FLAG == 0 { vec.push(Direction2D::Up); }
+        if y != self.height - 1 && *self.get(x, y + 1) & FLAG == 0 { vec.push(Direction2D::Down); }
     }
 }
 
@@ -49,22 +49,22 @@ impl DepthFirst for Orthogonal {
                 Some(wall) => {
                     self.break_wall(x, y, wall);
                     match wall {
-                        Direction::Left => {
+                        Direction2D::Left => {
                             x -= 1;
                             self.map[y * self.width + x] &= LAST_DIRECTION_MASK_INVERSE;
                             self.map[y * self.width + x] |= LAST_DIRECTION_RIGHT;
                         }
-                        Direction::Right => {
+                        Direction2D::Right => {
                             x += 1;
                             self.map[y * self.width + x] &= LAST_DIRECTION_MASK_INVERSE;
                             self.map[y * self.width + x] |= LAST_DIRECTION_LEFT;
                         }
-                        Direction::Up => {
+                        Direction2D::Up => {
                             y -= 1;
                             self.map[y * self.width + x] &= LAST_DIRECTION_MASK_INVERSE;
                             self.map[y * self.width + x] |= LAST_DIRECTION_DOWN;
                         }
-                        Direction::Down => {
+                        Direction2D::Down => {
                             y += 1;
                             self.map[y * self.width + x] &= LAST_DIRECTION_MASK_INVERSE;
                             self.map[y * self.width + x] |= LAST_DIRECTION_UP;
