@@ -1,3 +1,3 @@
-pub trait DepthFirst {
-    fn depth_first(&mut self, seed: Option<[u8; 16]>);
-}
+mod depth_first;
+
+pub use depth_first::DepthFirst;

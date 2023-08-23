@@ -1,19 +1,19 @@
 mod depth_first;
 mod stdout;
+mod image;
 
-const RIGHT_WALL: u8 = 0b0000_0010;
-const DOWN_WALL: u8 = 0b0000_0001;
+use super::Direction2D;
 
-#[derive(Debug, Clone, Copy)]
-pub enum Direction { Left, Right, Up, Down }
+pub const LEFT_WALL: u8 = 0b0000_0010;
+pub const UP_WALL: u8 = 0b0000_0001;
 
 /// Cell:
 ///
 /// | flag | description |
 /// |:-----|:------------|
 /// | 0-5  | Algorithm customization |
-/// | 6    | Right wall |
-/// | 7    | Down wall |
+/// | 6    | Left wall |
+/// | 7    | Up wall |
 
 pub struct Orthogonal {
     width: usize,
@@ -42,12 +42,12 @@ impl Orthogonal {
     }
 
     ///应判断是否越界，但从性能角度考虑，交给生成算法判断
-    pub fn break_wall(&mut self, x: usize, y: usize, wall: &Direction) {
+    pub fn break_wall(&mut self, x: usize, y: usize, wall: &Direction2D) {
         match wall {
-            Direction::Left => self.map[y * self.width + x - 1] |= RIGHT_WALL,
-            Direction::Right => self.map[y * self.width + x] |= RIGHT_WALL,
-            Direction::Up => self.map[(y - 1) * self.width + x] |= DOWN_WALL,
-            Direction::Down => self.map[y * self.width + x] |= DOWN_WALL,
+            Direction2D::Left => self.map[y * self.width + x] |= LEFT_WALL,
+            Direction2D::Right => self.map[y * self.width + x + 1] |= LEFT_WALL,
+            Direction2D::Up => self.map[y * self.width + x] |= UP_WALL,
+            Direction2D::Down => self.map[(y + 1) * self.width + x] |= UP_WALL,
         }
     }
 }
@@ -55,9 +55,9 @@ impl Orthogonal {
 impl Default for Orthogonal {
     fn default() -> Self {
         Orthogonal {
-            width: 64,
-            height: 64,
-            map: vec![0; 64 * 64],
+            width: 32,
+            height: 32,
+            map: vec![0; 32 * 32],
         }
     }
 }

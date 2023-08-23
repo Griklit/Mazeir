@@ -1,1 +1,4 @@
-#Mazeir
+Mazeir
+---
+
+See src/main.rs

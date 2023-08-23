@@ -1,3 +1,3 @@
-pub trait Stdout {
+pub trait Print {
     fn print(&self);
 }
