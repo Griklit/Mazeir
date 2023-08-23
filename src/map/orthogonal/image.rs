@@ -25,24 +25,19 @@ impl Draw for Orthogonal {
             for cell in line.chunks(4) {
                 let mut byte = 0b0000_0000;
                 for (i, v) in cell.iter().enumerate() {
-                    if *v & UP_WALL == 0 { byte |= 0b1 << (6 - i * 2); }  // 如果上墙不存在，上墙位置设置为白色(1)
+                    if *v & UP_WALL != 0 { byte |= 0b1 << (6 - i * 2); }  // 如果上墙不存在，上墙位置设置为白色(1)
                 }
-                if cell.len() < 4 { byte |= 0b1000_0000 >> cell.len() * 2; }
-                print!("{:02x} ", byte);
                 writer.write(&[byte]).map_err(|_| DrawError::StreamWriterFailed)?;
             }
-            writer.write(&[0b0]).map_err(|_| DrawError::StreamWriterFailed)?;
+            if line.len() % 4 == 0 { writer.write(&[0b0]).map_err(|_| DrawError::StreamWriterFailed)?; }
             for cell in line.chunks(4) {
                 let mut byte = 0b0101_0101;
                 for (i, v) in cell.iter().enumerate() {
-                    if *v & LEFT_WALL == 0 { byte |= 0b1 << (7 - i * 2); }  // 如果左墙不存在，左墙位置设置为白色(1)
+                    if *v & LEFT_WALL != 0 { byte |= 0b1 << (7 - i * 2); }  // 如果左墙不存在，左墙位置设置为白色(1)
                 }
-                if cell.len() < 4 { byte |= 0b1000_0000 >> cell.len() * 2; }
-                print!("{:02x} ", byte);
                 writer.write(&[byte]).map_err(|_| DrawError::StreamWriterFailed)?;
             }
-            writer.write(&[0b0]).map_err(|_| DrawError::StreamWriterFailed)?;
-            println!();
+            if line.len() % 4 == 0 { writer.write(&[0b0]).map_err(|_| DrawError::StreamWriterFailed)?; }
         }
         for _ in 0..image_width_byte_count { writer.write(&[0b0]).map_err(|_| DrawError::CreateStreamWriterFailed)?; }
         Ok(())
