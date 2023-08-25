@@ -33,7 +33,10 @@ impl Orthogonal {
         (self.width / 2, self.height / 2)
     }
 
-    pub fn get(&mut self, x: usize, y: usize) -> &mut u8 {
+    pub fn get(&self, x: usize, y: usize) -> &u8 {
+        &self.map[y * self.width + x]
+    }
+    pub fn get_mut(&mut self, x: usize, y: usize) -> &mut u8 {
         &mut self.map[y * self.width + x]
     }
 
@@ -61,4 +64,3 @@ impl Default for Orthogonal {
         }
     }
 }
-

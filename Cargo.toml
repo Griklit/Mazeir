@@ -4,6 +4,7 @@ authors = ["Scalt"]
 version = "0.2.0"
 edition = "2021"
 license-file = "./LICENSE"
+default-run = "mazeir-cli"
 keywords = ['maze', 'depth-first']
 
 [lib]
@@ -13,10 +14,8 @@ test = false
 doctest = false
 
 [[bin]]
-name = "mazeir"
-path = "src/cli.rs"
-test = false
-doctest = false
+name = "mazeir-cli"
+path = "src/bin/cli/mod.rs"
 
 [[bin]]
 name = "mazeir-test"
@@ -29,5 +28,6 @@ path = "tests/lib.rs"
 [dependencies]
 rand = "^0.8.5"
 rand_xorshift = "^0.3.0"
+colored = "^2.0.4"
 png = "^0.17.10"
-argh = "^0.1.10"
+clap = { version = "^4.3.24", features = ["derive", "wrap_help"] }
