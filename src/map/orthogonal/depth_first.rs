@@ -9,7 +9,7 @@ use super::{Orthogonal, Direction2D};
 use rand::Rng;
 use rand::seq::SliceRandom;
 
-use crate::arithmetic::DepthFirst;
+use crate::algorithm::DepthFirst;
 
 const FLAG: u8 = 0b1000_0000;
 const LAST_DIRECTION_MASK: u8 = 0b0111_0000;
