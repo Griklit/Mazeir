@@ -34,6 +34,7 @@ impl Orthogonal {
 
 impl DepthFirst for Orthogonal {
     fn depth_first_with_rng<R: Rng + ?Sized>(&mut self, rng: &mut R) {
+        if self.width == 0 || self.height == 0 { return; }
         let mut rng = rng;
         let start_point = self.center_point();
         let (mut x, mut y) = (start_point.0, start_point.1);
