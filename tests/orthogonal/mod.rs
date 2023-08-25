@@ -33,6 +33,15 @@ fn depth_first_0x0() {
 }
 
 #[test]
+fn depth_first_1x1() {
+    let mut map = Orthogonal::new(1, 1);
+    let (snapshot_path, output_path) = get_path("depth-first_1x1");
+    map.depth_first_with_str_seed("1x1");
+    map.draw(fs::File::create(&output_path).unwrap()).unwrap();
+    assert_files_eq(&output_path, &snapshot_path);
+}
+
+#[test]
 fn depth_first_2x3() {
     let mut map = Orthogonal::new(2, 3);
     let (snapshot_path, output_path) = get_path("depth-first_2x3");
