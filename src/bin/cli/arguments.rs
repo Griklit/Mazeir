@@ -27,9 +27,9 @@ pub struct OrthogonalCli {
     #[arg(default_value = "16")]
     pub height: usize,
 
-    /// Arithmetic to generate the maze. support: DepthFirst only
+    /// Algorithm to generate the maze. support: DepthFirst only
     #[arg(short, long, default_value = "DepthFirst")]
-    pub arithmetic: Arithmetic,
+    pub algorithm: Algorithm,
 
     /// Seed for the maze
     #[arg(short, long)]

@@ -2,10 +2,14 @@
 name = "Mazeir"
 authors = ["Scalt"]
 version = "0.2.0"
-edition = "2021"
+description = "A fast and small memory maze generator."
+license = "MIT"
 license-file = "./LICENSE"
+readme = "./README.md"
+keywords = ['maze', 'depth-first', 'cli']
+
+edition = "2021"
 default-run = "mazeir-cli"
-keywords = ['maze', 'depth-first']
 
 [lib]
 name = "mazeir"

@@ -1,11 +1,13 @@
 Mazeir
 ---
 
+**For Giant Maze**
+
 ## Library
 
 ```rust
 use mazeir::map::Orthogonal;
-use mazeir::arithmetic::DepthFirst;
+use mazeir::algorithm::DepthFirst;
 use mazeir::output::Print;
 
 fn main() {
@@ -17,16 +19,16 @@ fn main() {
 
 ### Maze Map Type
 
-- `Orthogonal`
+- `Orthogonal` one byte one cell
 
-### Arithmetic Traits
+### Algorithm Traits
 
 - `DepthFirst`
 
 ### Output Traits
 
 - `Print`
-- `Draw`
+- `Draw` stream write to 1bit png file
 
 ## Command Line Interface
 
@@ -46,6 +48,8 @@ Options:
   -V, --version  Print version
 ```
 
+Orthogonal Maze
+
 ```bash
 >>> mazeir-cli orthogonal --help
 
@@ -58,9 +62,30 @@ Arguments:
   [HEIGHT]  Height of the maze [default: 16]
 
 Options:
-  -a, --arithmetic <ARITHMETIC>  Arithmetic to generate the maze. support: DepthFirst only [default: DepthFirst]
+  -a, --algorithm <ALGORITHM>  Algorithm of generate the maze. support DepthFirst only [default: DepthFirst]
   -s, --seed <SEED>              Seed for the maze
   -d, --draw <OUTPUT_FILE_PATH>  Draw the maze to a png file
   -p, --print                    Print the maze to stdout
   -h, --help                     Print help
 ```
+
+## Features
+
+### Map
+
+- [x] 2D orthogonal maze
+- [ ] 2D hexagonal maze
+- [ ] 3D orthogonal maze
+
+### Algorithm
+
+- [x] Depth First
+- [ ] Some kind of borderless algorithm
+- [ ] Etc..
+
+### Output
+
+- [x] Print to stdout
+- [x] Draw to png file
+- [ ] Output to txt file
+- [ ] Custom color index 1bit PNG file

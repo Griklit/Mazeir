@@ -8,7 +8,7 @@ use std::path::Path;
 use clap::Parser;
 
 use mazeir::map::Orthogonal;
-use mazeir::arithmetic::DepthFirst;
+use mazeir::algorithm::DepthFirst;
 use mazeir::output::{Draw, Print};
 
 
@@ -22,12 +22,12 @@ fn main() {
 fn orthogonal_cli(cli: OrthogonalCli) {
     let mut maze = Orthogonal::new(cli.width, cli.height);
     if let Some(seed) = cli.seed {
-        match cli.arithmetic {
-            Arithmetic::DepthFirst => maze.depth_first_with_str_seed(&seed),
+        match cli.algorithm {
+            Algorithm::DepthFirst => maze.depth_first_with_str_seed(&seed),
         }
     } else {
-        match cli.arithmetic {
-            Arithmetic::DepthFirst => maze.depth_first(),
+        match cli.algorithm {
+            Algorithm::DepthFirst => maze.depth_first(),
         }
     }
     if cli.print {
