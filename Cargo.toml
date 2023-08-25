@@ -3,6 +3,7 @@ name = "Mazeir"
 authors = ["Scalt"]
 version = "0.2.0"
 description = "A fast and small memory maze generator."
+repository = "https://github.com/Griklit/Mazeir"
 license = "MIT"
 license-file = "./LICENSE"
 readme = "./README.md"
