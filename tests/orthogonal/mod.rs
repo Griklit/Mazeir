@@ -18,7 +18,7 @@ fn get_path(file_name: &str) -> (PathBuf, PathBuf) {
 fn depth_first_default() {
     let mut map = Orthogonal::default();
     let (snapshot_path, output_path) = get_path("depth-first_default");
-    map.depth_first();
+    map.depth_first_with_str_seed("default");
     map.draw(fs::File::create(&output_path).unwrap()).unwrap();
     assert_files_eq(&output_path, &snapshot_path);
 }
