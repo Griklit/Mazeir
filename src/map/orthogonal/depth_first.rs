@@ -6,9 +6,8 @@
 //! | 1-3 | last direction |
 use super::{Orthogonal, Direction2D};
 
-use rand::SeedableRng;
+use rand::Rng;
 use rand::seq::SliceRandom;
-use rand_xorshift::XorShiftRng;
 
 use crate::arithmetic::DepthFirst;
 
@@ -23,28 +22,27 @@ const LAST_DIRECTION_DOWN: u8 = 0b00100_0000;
 
 
 impl Orthogonal {
+    #[inline]
     fn add_walls_to_vec_with_flag(&mut self, x: usize, y: usize, vec: &mut Vec<Direction2D>) {
-        if x != 0 && *self.get(x - 1, y) & FLAG == 0 { vec.push(Direction2D::Left); }
-        if x != self.width - 1 && *self.get(x + 1, y) & FLAG == 0 { vec.push(Direction2D::Right); }
-        if y != 0 && *self.get(x, y - 1) & FLAG == 0 { vec.push(Direction2D::Up); }
-        if y != self.height - 1 && *self.get(x, y + 1) & FLAG == 0 { vec.push(Direction2D::Down); }
+        if x != 0 && *self.get_mut(x - 1, y) & FLAG == 0 { vec.push(Direction2D::Left); }
+        if x != self.width - 1 && *self.get_mut(x + 1, y) & FLAG == 0 { vec.push(Direction2D::Right); }
+        if y != 0 && *self.get_mut(x, y - 1) & FLAG == 0 { vec.push(Direction2D::Up); }
+        if y != self.height - 1 && *self.get_mut(x, y + 1) & FLAG == 0 { vec.push(Direction2D::Down); }
     }
 }
 
 
 impl DepthFirst for Orthogonal {
-    fn depth_first(&mut self, seed: Option<[u8; 16]>) {
-        let mut rng = if let Some(seed) = seed { XorShiftRng::from_seed(seed) } else { XorShiftRng::from_entropy() };
+    fn depth_first_with_rng<R: Rng + ?Sized>(&mut self, rng: &mut R) {
+        let mut rng = rng;
         let start_point = self.center_point();
         let (mut x, mut y) = (start_point.0, start_point.1);
         self.set(x, y, FLAG);
         let mut walls = Vec::with_capacity(4);
         loop {
             walls.clear();
-            // println!("{} {} {} {}", x, y, self.width, self.height);
             self.add_walls_to_vec_with_flag(x, y, &mut walls);
             let wall = walls.choose(&mut rng);
-            // println!("{:?}", wall);
             match wall {
                 Some(wall) => {
                     self.break_wall(x, y, wall);
@@ -73,7 +71,7 @@ impl DepthFirst for Orthogonal {
                     self.map[y * self.width + x] |= FLAG;
                 }
                 None => {
-                    let point_value = self.get(x, y);
+                    let point_value = self.get_mut(x, y);
                     match *point_value & LAST_DIRECTION_MASK {
                         LAST_DIRECTION_LEFT => { x -= 1; }
                         LAST_DIRECTION_RIGHT => { x += 1; }
