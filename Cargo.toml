@@ -17,12 +17,9 @@ doctest = false
 name = "mazeir-cli"
 path = "src/bin/cli/mod.rs"
 
-[[bin]]
-name = "mazeir-test"
-path = "src/main.rs"
 
 [[test]]
-name = "mazeir"
+name = "mazeir-test"
 path = "tests/lib.rs"
 
 [dependencies]
