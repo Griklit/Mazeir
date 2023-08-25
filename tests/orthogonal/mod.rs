@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::PathBuf;
 
-use mazeir::Orthogonal;
+use mazeir::map::Orthogonal;
 use mazeir::algorithm::DepthFirst;
 use mazeir::output::Draw;
 
