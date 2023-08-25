@@ -1,6 +1,6 @@
 use mazeir::Orthogonal;
 use mazeir::arithmetic::DepthFirst;
-use mazeir::output::{Print, Draw};
+use mazeir::output::{Print};
 
 fn main() {
     let mut map = Orthogonal::new(2_i32.pow(1) as usize, 2_i32.pow(1) as usize);

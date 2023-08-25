@@ -20,23 +20,27 @@ impl Draw for Orthogonal {
         encoder.set_palette(vec![0, 0, 0, 255, 255, 255]);
         let mut writer = encoder.write_header().map_err(|_| DrawError::WriteHeaderFailed)?;
         let mut writer = writer.stream_writer_with_size(128 * 1024).map_err(|_| DrawError::CreateStreamWriterFailed)?;
+        if self.width == 0 || self.height == 0 {
+            writer.write(&[0b0]).map_err(|_| DrawError::StreamWriteFailed)?;
+            return Ok(());
+        }
         for line in self.map.chunks(self.width) {
             for cell in line.chunks(4) {
                 let mut byte = 0b0000_0000;
                 for (i, v) in cell.iter().enumerate() {
                     if *v & UP_WALL != 0 { byte |= 0b1 << (6 - i * 2); }  // 如果上墙不存在，上墙位置设置为白色(1)
                 }
-                writer.write(&[byte]).map_err(|_| DrawError::StreamWriterFailed)?;
+                writer.write(&[byte]).map_err(|_| DrawError::StreamWriteFailed)?;
             }
-            if line.len() % 4 == 0 { writer.write(&[0b0]).map_err(|_| DrawError::StreamWriterFailed)?; }
+            if line.len() % 4 == 0 { writer.write(&[0b0]).map_err(|_| DrawError::StreamWriteFailed)?; }
             for cell in line.chunks(4) {
                 let mut byte = 0b0101_0101;
                 for (i, v) in cell.iter().enumerate() {
                     if *v & LEFT_WALL != 0 { byte |= 0b1 << (7 - i * 2); }  // 如果左墙不存在，左墙位置设置为白色(1)
                 }
-                writer.write(&[byte]).map_err(|_| DrawError::StreamWriterFailed)?;
+                writer.write(&[byte]).map_err(|_| DrawError::StreamWriteFailed)?;
             }
-            if line.len() % 4 == 0 { writer.write(&[0b0]).map_err(|_| DrawError::StreamWriterFailed)?; }
+            if line.len() % 4 == 0 { writer.write(&[0b0]).map_err(|_| DrawError::StreamWriteFailed)?; }
         }
         for _ in 0..image_width_byte_count { writer.write(&[0b0]).map_err(|_| DrawError::CreateStreamWriterFailed)?; }
         Ok(())
@@ -47,15 +51,16 @@ impl Draw for Orthogonal {
 pub enum DrawError {
     WriteHeaderFailed,
     CreateStreamWriterFailed,
-    StreamWriterFailed,
+    StreamWriteFailed,
+
 }
 
 impl Display for DrawError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            DrawError::WriteHeaderFailed => write!(f, "写入PNG文件头失败"),
-            DrawError::CreateStreamWriterFailed => write!(f, "创建PNG文件流失败"),
-            DrawError::StreamWriterFailed => write!(f, "写入PNG文件流失败"),
+            DrawError::WriteHeaderFailed => write!(f, "Write header failed"),
+            DrawError::CreateStreamWriterFailed => write!(f, "Create stream writer failed"),
+            DrawError::StreamWriteFailed => write!(f, "Stream write failed"),
         }
     }
 }
