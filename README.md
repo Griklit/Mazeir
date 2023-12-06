@@ -1,6 +1,6 @@
 Mazeir
 ---
-![123](/tests/orthogonal/snapshot/depth-first_1076x593.png)
+![Yes, It's a maze](/tests/orthogonal/snapshot/depth-first_1076x593.png)
 
 **For Giant Maze**
 
